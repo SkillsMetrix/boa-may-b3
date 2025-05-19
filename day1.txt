@@ -1,0 +1,8 @@
+
+print('welcome to python')
+
+name='BOA India'
+pin=12345
+print(name,pin)
+
+print(f" Company name is {name} and pincode is  {pin}")
