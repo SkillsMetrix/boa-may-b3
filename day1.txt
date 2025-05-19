@@ -3,3 +3,17 @@ b= int(input('Enter the value of b : '))
 
 c=a+b
 print(f"the additions is {c}")
+
+
+
+------
+
+
+
+a=10
+b=5
+
+if a > b:
+    print('statement is true')
+else:
+     print('statement is false')
