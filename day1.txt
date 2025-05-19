@@ -1,4 +1,38 @@
 
+# class declaration
+class User:
+    username=''
+    email=''
+    city=''
+    # its a constructor
+    def __init__(self,username,email,city):
+        self.username=username
+        self.email=email
+        self.city=city
+    # its a function ,convert object to human readable format
+    def __str__(self):
+        return f"UserName is {self.username}, email is {self.email} and city is {self.city}"
+    
+    #def showDetails(self):
+        #return f"UserName is {self.username}, email is {self.email} and city is {self.city}"
+
+manoj= User('Manoj Kumar','Manoj@mail.com','chennai')
+
+shital=User('sheetal','sheetal@mail.com','mumbai')
+suresh=User('suresh','suresh@mail.com','chennai')
+print(manoj)
+print(shital)
+print(suresh)
+
+
+-----
+
+
+
+
+
+
+
 
 🧮 2. Arithmetic and Comparison
 Exercise 3:
