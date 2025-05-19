@@ -1,19 +1,15 @@
-a= int(input('Enter the value of a : '))
-b= int(input('Enter the value of b : '))
 
-c=a+b
-print(f"the additions is {c}")
+#declare an array
 
+use_numbers=[]
+print(f"Initial Value: {use_numbers}")
 
+data= int(input('How many values you need to add? '))
+print(f"You Entered the range Value: {data}")
 
-------
+# take the value
 
-
-
-a=10
-b=5
-
-if a > b:
-    print('statement is true')
-else:
-     print('statement is false')
+for i in range(data):
+    num=int(input (f"Enter {i+1} value: "))
+    use_numbers.append(num)
+print(use_numbers)
