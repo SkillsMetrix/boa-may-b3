@@ -1,33 +1,37 @@
 
-#declare an array
 
-use_numbers=[]
-print(f"Initial Value: {use_numbers}")
+🧮 2. Arithmetic and Comparison
+Exercise 3:
+Write a program to calculate the area of a rectangle (length × width).
 
-data= int(input('How many values you need to add? '))
-print(f"You Entered the range Value: {data}")
+Exercise 4:
+Check if a number is even or odd.
 
-# take the value
+🔁 3. Conditional Statements
+Exercise 5:
+Write a program to check if a number is positive, negative, or zero.
 
-for i in range(data):
-    num=int(input (f"Enter {i+1} value: "))
-    use_numbers.append(num)
-# pring even and odd num
+Exercise 6:
+Grade calculator:
 
-for num in use_numbers:
-    if(num%2==0):
-        print(f"{num} is even")
-    else:
-         print(f"{num} is odd")
+If marks ≥ 90: A
 
-# print values with positions
+If 80–89: B
 
-print("------printing Even positions---------")
+If 70–79: C
 
-for i in range(0,len(use_numbers),2):
-    print(f"Index {i} -> {use_numbers[i]}")
+Else: F
 
-print("------printing Odd positions---------")
+🔂 4. Loops
+Exercise 7:
+Print numbers from 1 to 10 using a for loop.
 
-for i in range(1,len(use_numbers),2):
-    print(f"Index {i} -> {use_numbers[i]}")
+Exercise 8:
+Print even numbers between 1 and 50 using a while loop.
+
+🧰 5. Functions
+Exercise 9:
+Create a function greet(name) that prints a personalized greeting.
+
+Exercise 10:
+Write a function to calculate the factorial of a number.
