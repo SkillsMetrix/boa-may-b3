@@ -1,32 +1,28 @@
 
-# class declaration
-class User:
-    username=''
-    email=''
-    city=''
-    # its a constructor
-    def __init__(self,username,email,city):
-        self.username=username
-        self.email=email
-        self.city=city
-    # its a function ,convert object to human readable format
-    def __str__(self):
-        return f"UserName is {self.username}, email is {self.email} and city is {self.city}"
-    
-    #def showDetails(self):
-        #return f"UserName is {self.username}, email is {self.email} and city is {self.city}"
+from abc import ABC,abstractmethod
 
-manoj= User('Manoj Kumar','Manoj@mail.com','chennai')
-
-shital=User('sheetal','sheetal@mail.com','mumbai')
-suresh=User('suresh','suresh@mail.com','chennai')
-print(manoj)
-print(shital)
-print(suresh)
-
-
+class RBI(ABC):
+    @abstractmethod
+    def depositAmount(self):
+        pass
+    @abstractmethod
+    def withdrawAmount(self):
+        pass
 -----
 
+from RBI import RBI
+class SBI(RBI):
+    def openFD(self):
+        print('FD opened')
+    def depositAmount(self):
+        print('deposited in SBI')
+    def withdrawAmount(self):
+        print('withdraw from SBI')
+
+sbiBank= SBI()
+sbiBank.openFD()
+sbiBank.depositAmount()
+sbiBank.withdrawAmount()
 
 
 
