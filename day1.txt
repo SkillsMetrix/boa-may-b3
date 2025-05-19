@@ -12,4 +12,22 @@ print(f"You Entered the range Value: {data}")
 for i in range(data):
     num=int(input (f"Enter {i+1} value: "))
     use_numbers.append(num)
-print(use_numbers)
+# pring even and odd num
+
+for num in use_numbers:
+    if(num%2==0):
+        print(f"{num} is even")
+    else:
+         print(f"{num} is odd")
+
+# print values with positions
+
+print("------printing Even positions---------")
+
+for i in range(0,len(use_numbers),2):
+    print(f"Index {i} -> {use_numbers[i]}")
+
+print("------printing Odd positions---------")
+
+for i in range(1,len(use_numbers),2):
+    print(f"Index {i} -> {use_numbers[i]}")
