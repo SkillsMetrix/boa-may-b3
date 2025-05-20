@@ -1,25 +1,14 @@
 
 from fastapi import FastAPI,HTTPException,status
-from pydantic import BaseModel
+from .import schema
 from random import randrange
-
-
 app=FastAPI()
 userData=[]
-
-#schema
-class User(BaseModel):
-    uname: str
-    email: str
-    city: str
-
-# perform search operation
 
 def searchUser(id):
     for index,value in enumerate(userData):
         if value['id']== id:
             return index
-
 
 @app.get('/loadusers')
 def loadUsers():
@@ -44,7 +33,7 @@ def deleteUser(id:int):
 
 
 @app.put('/updateuser/{id}')
-def updateUser(id:int,data:User):
+def updateUser(id:int,data:schema.User):
     post=searchUser(id)
     if post == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Sorry, User With Given ID not Found")
@@ -56,8 +45,17 @@ def updateUser(id:int,data:User):
 
 
 @app.post('/addusers')
-def addUser(data:User):
+def addUser(data:schema.User):
     userValue=data.model_dump()
     userValue['id']=randrange(0,1000)
     userData.append(userValue)
     return {'message':userValue}
+
+
+-----
+
+from pydantic import BaseModel
+class User(BaseModel):
+    uname: str
+    email: str
+    city: str
