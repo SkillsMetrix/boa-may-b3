@@ -1,0 +1,12 @@
+
+from fastapi import FastAPI
+
+app=FastAPI()
+
+@app.get('/loadusers')
+def loadUsers():
+    return {'message':'users loaded'}
+
+@app.get('/addusers')
+def addUser():
+    return {'message':'user added'}
