@@ -19,3 +19,34 @@ def get_connection():
         yield db
     finally:
         db.close()
+
+
+-----
+
+
+# this file describe the table and columns in database
+
+from sqlalchemy import Column,String
+from .database import Base
+
+
+class UserApp(Base):
+    __tablename__="USERAPP"
+    uname= Column(String,primary_key=True)
+    email=Column(String)
+    city= Column(String)
+
+
+-----
+
+
+from fastapi import FastAPI
+from .database import engine
+from . import cud,readdata,models
+
+app=FastAPI()
+# this line creates respective table in DB by seeing the model
+models.Base.metadata.create_all(bind=engine)
+
+app.include_router(cud.router)
+app.include_router(readdata.router)
