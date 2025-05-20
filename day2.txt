@@ -1,61 +1,21 @@
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-from fastapi import FastAPI,HTTPException,status
-from .import schema
-from random import randrange
-app=FastAPI()
-userData=[]
+SQL_DB = "sqlite:///./mytest.db"
 
-def searchUser(id):
-    for index,value in enumerate(userData):
-        if value['id']== id:
-            return index
+engine = create_engine(
+    SQL_DB, connect_args={"check_same_thread": False}
 
-@app.get('/loadusers')
-def loadUsers():
-    return {'message':userData}
+)
+SessioLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
 
 
-@app.get('/loaduser/{id}')
-def loadUser(id:int):
-    post=searchUser(id)
-    if post == None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Sorry, User With Given ID not Found")
-    
-    return {'user found': post}
-
-@app.delete('/deleteuser/{id}')
-def deleteUser(id:int):
-    post=searchUser(id)
-    if post == None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Sorry, User With Given ID not Found")
-    userData.pop(post)
-    return {'user found and deleted': post}
-
-
-@app.put('/updateuser/{id}')
-def updateUser(id:int,data:schema.User):
-    post=searchUser(id)
-    if post == None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Sorry, User With Given ID not Found")
-    userValue=data.model_dump()
-    userValue['id']=id
-    userData[post]=userValue
-    
-    return {'user found and updated': userValue}
-
-
-@app.post('/addusers')
-def addUser(data:schema.User):
-    userValue=data.model_dump()
-    userValue['id']=randrange(0,1000)
-    userData.append(userValue)
-    return {'message':userValue}
-
-
------
-
-from pydantic import BaseModel
-class User(BaseModel):
-    uname: str
-    email: str
-    city: str
+def get_connection():
+    db = SessioLocal()
+    try:
+        yield db
+    finally:
+        db.close()
