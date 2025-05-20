@@ -18,7 +18,7 @@ class User(BaseModel):
 def searchUser(id):
     for index,value in enumerate(userData):
         if value['id']== id:
-            return value
+            return index
 
 
 @app.get('/loadusers')
@@ -33,6 +33,26 @@ def loadUser(id:int):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Sorry, User With Given ID not Found")
     
     return {'user found': post}
+
+@app.delete('/deleteuser/{id}')
+def deleteUser(id:int):
+    post=searchUser(id)
+    if post == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Sorry, User With Given ID not Found")
+    userData.pop(post)
+    return {'user found and deleted': post}
+
+
+@app.put('/updateuser/{id}')
+def updateUser(id:int,data:User):
+    post=searchUser(id)
+    if post == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Sorry, User With Given ID not Found")
+    userValue=data.model_dump()
+    userValue['id']=id
+    userData[post]=userValue
+    
+    return {'user found and updated': userValue}
 
 
 @app.post('/addusers')
