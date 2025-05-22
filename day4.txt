@@ -1,30 +1,80 @@
-- name: update apt cache and install nginx
-  apt:
-    name: nginx
-    state: latest
-    update_cache: true
+FROM python:3.11-slim
 
-- name: copy index to destination
-  template: src=index.html dest=/usr/share/nginx/html/index.html
+WORKDIR /app
 
-- name: copy update to destination
-  template: src=updated.html dest=/usr/share/nginx/html/index.html
-  notify: 
-    - Restart Nginx
+COPY . .
+
+RUN pip install fastapi uvicorn
+
+CMD ["uvicorn" , "main:app" , "--host", "0.0.0.0", "--port", "8000"]
 
 
 
--------
+------
 
 
-- hosts: db
+- name: Install Docker and Deploy FastAPI
+  hosts: db
   become: true
-  gather_facts: False
-  roles:
-    - handler-demo
+  vars:
+    app_dir: /opt/fastapi-app
+    image_name: fastapi-app
+    container_name: fastapi-container
+    ansible_user: ubuntu
 
-  handlers:
-    - name: Restart Nginx
+  tasks:
+    - name: update APT cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: ensure Docker is running and enabled
       service:
-        name: nginx
+        name: docker
         state: started
+        enabled: true
+
+    - name: Add current user to docker group
+      user:
+        name: "{{ansible_user}}"
+        groups: docker
+        append: yes
+
+    - name: create app directory
+      file:
+        path: "{{app_dir}}"
+        state: directory
+        owner: "{{ansible_user}}"
+        mode: '0755'
+
+    - name: copy FastAPI app code
+      copy:
+        src: ./app/
+        dest: "{{app_dir}}"
+        owner: "{{ansible_user}}"
+        mode: '0755'
+
+
+    - name: build docker image
+      command: docker build -t {{image_name}} .
+      args:
+        chdir: "{{app_dir}}"
+
+    - name: Stop and remove any existing container if any
+      shell: |
+        docker rm -f {{container_name}} || true
+
+    - name: Run FastAPI Docker container
+      command: >
+        docker run -d --name {{container_name}}
+        -p 8000:8000 {{image_name}}
+
+
+
+
+
+
