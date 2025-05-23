@@ -1,21 +1,42 @@
-- name: Uninstall Apache server
+# this is dedicated for installing packages
+- name: Install required packages
   apt:
-    name: apache2
-    state: absent
-  when: install_apache_flag
+    name:
+      - nginx
+      - git
+      - curl
+    state: latest
+    update_cache: yes
 
-- name: check the OS values
-  debug:
-    var: ansible_facts['kernel_version']
-  when:
-    - ansible_facts['os_family'] == 'Debian'
-    - ansible_facts['distribution_major_version'] >="20"
 
-- name: register the var
-  command: cat /home/ubuntu/boa-users.txt
-  register: text_content
 
-- name: use the var to set the condition
-  debug:
-    var: text_content.stdout
-  when: text_content.stdout.find('superadmin') != -1
+--------
+
+
+# this is all about dealing with messages
+
+- name: set message file
+  copy:
+    content: "{{message}}"
+    dest: /var/www/html/index.html
+
+
+------
+
+
+- import_tasks: packages.yml
+- import_tasks: message.yml
+
+- name: Start nginx service
+  service:
+    name: nginx
+    state: started
+
+
+---
+
+- name: example app
+  hosts: db
+  become: true
+  roles:
+    - custom-role
