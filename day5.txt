@@ -1,4 +1,30 @@
 
+
+- name: Install lighttpd web server
+  become: true
+  apt:
+    name: lighttpd
+    state: latest
+    update_cache: yes
+
+- name: Generate Config File
+  template:
+    src: myconfig.j2
+    dest: /etc/lighttpd/lighttpd.conf
+    mode: '0644'
+  vars:
+    server_port: 9090
+
+- name: start lighttpd service
+  service:
+    name: lighttpd
+    state: started
+
+
+---------
+
+
+
 server.modules = (
         "mod_indexfile",
         "mod_access",
